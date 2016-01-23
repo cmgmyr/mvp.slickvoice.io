@@ -31,7 +31,16 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 Route::group(['middleware' => 'web'], function () {
-    Route::auth();
+    Route::get('/home', ['as' => 'home', 'uses' => 'HomeController@index']);
 
-    Route::get('/home', 'HomeController@index');
+
+    // Authentication Routes...
+    $this->get('login', ['as' => 'login', 'uses' => 'Auth\AuthController@showLoginForm']);
+    $this->post('login', 'Auth\AuthController@login');
+    $this->get('logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@logout']);
+
+    // Password Reset Routes...
+    $this->get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
+    $this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
+    $this->post('password/reset', 'Auth\PasswordController@reset');
 });

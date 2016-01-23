@@ -1,0 +1,8 @@
+{
+    "name": "slickvoice",
+    "dependencies": {
+        "jquery": "~2.1",
+        "bootstrap": "~3.3",
+        "fontawesome": "~4.5"
+    }
+}

@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Hash;
 class User extends Authenticatable
 {
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -33,5 +40,17 @@ class User extends Authenticatable
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    /**
+     * Returns the gravatar image for the user.
+     *
+     * @param $size
+     * @return string
+     */
+    public function getAvatarAttribute($size)
+    {
+        $email = md5($this->email);
+        return "//www.gravatar.com/avatar/{$email}?s={$size}";
     }
 }

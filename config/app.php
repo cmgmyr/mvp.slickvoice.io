@@ -149,12 +149,20 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
+         * Package Service Providers...
+         */
+
+
+        /*
          * Application Service Providers...
          */
         Sv\Providers\AppServiceProvider::class,
         Sv\Providers\AuthServiceProvider::class,
+        Sv\Providers\ComposerServiceProvider::class,
         Sv\Providers\EventServiceProvider::class,
         Sv\Providers\RouteServiceProvider::class,
+
+        Sv\Notifications\FlashServiceProvider::class,
 
     ],
 
@@ -201,6 +209,11 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+
+        // Package Facades
+
+        // Application Facades
+        'Flash'     => Sv\Notifications\Flash::class,
 
     ],
 

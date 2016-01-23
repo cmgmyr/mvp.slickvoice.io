@@ -1,4 +1,7 @@
 /vendor
 /node_modules
+/public/build
+/public/css
+/public/js
 .env
 .php_cs.cache
