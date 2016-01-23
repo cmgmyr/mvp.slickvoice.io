@@ -1,4 +1,4 @@
 #SlickVoice (MVP)
-Super Easy Invoicing & Payments for Everyone
+Invoicing and payment service for freelancers and developers using Lavavel and Stripe.
 
 Coming Soon...
