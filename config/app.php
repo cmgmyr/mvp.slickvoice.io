@@ -160,6 +160,7 @@ return [
         Sv\Providers\ComposerServiceProvider::class,
         Sv\Providers\EventServiceProvider::class,
         Sv\Providers\RouteServiceProvider::class,
+        Sv\Providers\StripeServiceProvider::class,
 
         Sv\Notifications\FlashServiceProvider::class,
 
