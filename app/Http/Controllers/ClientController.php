@@ -2,6 +2,7 @@
 
 namespace Sv\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Stripe\Customer as StripeCustomer;
 use Sv\Client;
@@ -48,7 +49,9 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        $client = new Client();
+
+        return view('clients.create', compact('client'));
     }
 
     /**
@@ -59,18 +62,14 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:clients|max:255',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        CLient::create($request->all());
+
+        return $this->redirectRouteWithSuccess('clients.index', 'The client has been created.');
     }
 
     /**
@@ -81,7 +80,13 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $client = Client::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The client was not found, please try again.');
+        }
+
+        return view('clients.edit', compact('client'));
     }
 
     /**
@@ -93,7 +98,29 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $client = Client::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The client was not found, please try again.');
+        }
+
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:clients,email,' . $id . '|max:255',
+        ]);
+
+        $client->name = $request->name;
+        $client->email = $request->email;
+        $client->address = $request->address;
+        $client->address2 = $request->address2;
+        $client->city = $request->city;
+        $client->state = $request->state;
+        $client->zip = $request->zip;
+        $client->phone = $request->phone;
+
+        $client->save();
+
+        return $this->redirectRouteWithSuccess('clients.index', 'The client has been updated.');
     }
 
     /**

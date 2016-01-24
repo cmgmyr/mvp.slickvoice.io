@@ -15,6 +15,7 @@
                     <td>Stripe ID</td>
                     <td>Name</td>
                     <td>Email</td>
+                    <td>Phone</td>
                     <td>Manage</td>
                 </tr>
             </thead>
@@ -24,6 +25,7 @@
                 <td>{{ $client->stripe_id }}</td>
                 <td>{{ $client->name }}</td>
                 <td><a href="mailto: {{ $client->email }}">{{ $client->email }}</a></td>
+                <td>{{ $client->phone }}</td>
                 <td>
                     <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-info btn-xs">Edit</a>
 

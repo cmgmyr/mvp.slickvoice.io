@@ -10,7 +10,6 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('create', ['as' => 'clients.create', 'uses' => 'ClientController@create']);
             Route::get('import', ['as' => 'clients.import', 'uses' => 'ClientController@import']);
             Route::post('/', ['as' => 'clients.store', 'uses' => 'ClientController@store']);
-            Route::get('{id}', ['as' => 'clients.show', 'uses' => 'ClientController@show']);
             Route::get('{id}/edit', ['as' => 'clients.edit', 'uses' => 'ClientController@edit']);
             Route::put('{id}', ['as' => 'clients.update', 'uses' => 'ClientController@update']);
             Route::delete('{id}', ['as' => 'clients.destroy', 'uses' => 'ClientController@destroy']);
