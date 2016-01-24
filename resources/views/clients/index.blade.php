@@ -1,8 +1,10 @@
 @extends('layouts.app')
 
+@section('title', 'Clients')
+
 @section('content')
-    <h1 class="page-header">Clients</h1>
     <p>
+        <a href="{{ route('clients.create') }}" class="btn btn-primary"><span class="fa fa-plus"></span> Add Client</a>
         <a href="{{ route('clients.import') }}" class="btn btn-default"><span class="fa fa-download"></span> Import</a>
     </p>
 

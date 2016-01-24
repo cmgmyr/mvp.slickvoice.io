@@ -60,6 +60,7 @@
         <div class="row">
             <div class="col-md-12">
                 @include('common.flash')
+                <h1 class="page-header">@yield('title')</h1>
                 @yield('content')
                 @yield('pagination')
             </div>
