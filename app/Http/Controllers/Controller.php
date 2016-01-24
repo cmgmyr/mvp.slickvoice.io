@@ -5,6 +5,7 @@ namespace Sv\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Sv\Notifications\Flash;
 
@@ -18,7 +19,7 @@ class Controller extends BaseController
      * @param $route
      * @param $message
      * @param array $params
-     * @return mixed
+     * @return RedirectResponse
      */
     public function redirectRouteWithSuccess($route, $message, $params = [])
     {
@@ -33,7 +34,7 @@ class Controller extends BaseController
      * @param $route
      * @param $message
      * @param array $params
-     * @return mixed
+     * @return RedirectResponse
      */
     public function redirectRouteWithError($route, $message, $params = [])
     {
@@ -46,7 +47,7 @@ class Controller extends BaseController
      * Redirects back with a successful message.
      *
      * @param $message
-     * @return mixed
+     * @return RedirectResponse
      */
     public function redirectBackWithSuccess($message)
     {
@@ -59,7 +60,7 @@ class Controller extends BaseController
      * Redirects back with an error message.
      *
      * @param $message
-     * @return mixed
+     * @return RedirectResponse
      */
     public function redirectBackWithError($message)
     {
