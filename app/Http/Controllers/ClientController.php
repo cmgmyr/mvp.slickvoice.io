@@ -68,6 +68,7 @@ class ClientController extends Controller
         ]);
 
         CLient::create($request->all());
+        // @todo: Create customer in Stripe
 
         return $this->redirectRouteWithSuccess('clients.index', 'The client has been created.');
     }
@@ -119,6 +120,7 @@ class ClientController extends Controller
         $client->phone = $request->phone;
 
         $client->save();
+        // @todo: Edit customer in Stripe
 
         return $this->redirectRouteWithSuccess('clients.index', 'The client has been updated.');
     }
@@ -131,6 +133,17 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $client = Client::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The client was not found, please try again.');
+        }
+
+        $stripe_id = $client->stripe_id;
+        // @todo: Delete customer in Stripe
+
+        $client->delete();
+
+        return $this->redirectRouteWithSuccess('clients.index', 'The client has been deleted.');
     }
 }
