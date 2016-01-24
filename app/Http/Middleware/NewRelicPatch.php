@@ -10,6 +10,7 @@ class NewRelicPatch
     {
         $response = $next($request);
         event('router.filter:after:newrelic-patch', [$request, $response], true);
+
         return $response;
     }
 }

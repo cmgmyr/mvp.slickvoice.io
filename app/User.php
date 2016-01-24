@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'admin', 'active'
+        'name', 'email', 'password', 'admin', 'active',
     ];
 
     /**
@@ -51,6 +51,7 @@ class User extends Authenticatable
     public function getAvatarAttribute($size)
     {
         $email = md5($this->email);
+
         return "//www.gravatar.com/avatar/{$email}?s={$size}";
     }
 }
