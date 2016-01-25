@@ -8,7 +8,7 @@
         <a href="{{ route('clients.import') }}" class="btn btn-default"><span class="fa fa-download"></span> Import</a>
     </p>
 
-    @if($clients)
+    @if($clients->count() > 0)
         <table class="table table-condensed table-hover table-bordered table-striped">
             <thead>
                 <tr>
@@ -41,7 +41,7 @@
             </tbody>
         </table>
     @else
-        <p>Sorry, there are no clients yet. Please add one!</p>
+        <p>Sorry, there are no clients yet. Please <a href="{{ route('clients.create') }}">add one</a>!</p>
     @endif
 @endsection
 
