@@ -34,6 +34,8 @@
                 <td>
                     <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-info btn-xs">Edit</a>
 
+                    <a href="{{ route('clients.card-edit', $client->id) }}" class="btn btn-success btn-xs">Swap Card</a>
+
                     <form method="post" action="{{ route('clients.destroy', $client->id) }}" style="display:inline;"
                         data-confirm="Are you sure?" class="delete-confirm">
                         {!! csrf_field() !!}

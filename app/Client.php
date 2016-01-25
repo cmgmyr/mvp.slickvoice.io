@@ -38,7 +38,7 @@ class Client extends Model
      */
     public function getCardBrandClassAttribute()
     {
-        if($this->card_brand == 'American Express') {
+        if ($this->card_brand == 'American Express') {
             return 'cc-amex';
         }
 

@@ -12,6 +12,8 @@ Route::group(['middleware' => 'web'], function () {
             Route::post('/', ['as' => 'clients.store', 'uses' => 'ClientController@store']);
             Route::get('{id}/edit', ['as' => 'clients.edit', 'uses' => 'ClientController@edit']);
             Route::put('{id}', ['as' => 'clients.update', 'uses' => 'ClientController@update']);
+            Route::get('{id}/card', ['as' => 'clients.card-edit', 'uses' => 'ClientController@editCard']);
+            Route::put('{id}/card', ['as' => 'clients.card-update', 'uses' => 'ClientController@updateCard']);
             Route::delete('{id}', ['as' => 'clients.destroy', 'uses' => 'ClientController@destroy']);
         });
     });

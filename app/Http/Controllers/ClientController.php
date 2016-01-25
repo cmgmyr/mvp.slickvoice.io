@@ -176,4 +176,57 @@ class ClientController extends Controller
 
         return $this->redirectRouteWithSuccess('clients.index', 'The client has been deleted.');
     }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editCard($id)
+    {
+        try {
+            $client = Client::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The client was not found, please try again.');
+        }
+
+        return view('clients.card', compact('client'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateCard(Request $request, $id)
+    {
+        try {
+            $client = Client::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The client was not found, please try again.');
+        }
+
+        $this->validate($request, [
+            'card_number' => 'required',
+            'csv' => 'required',
+            'exp_month' => 'required',
+            'exp_year' => 'required',
+        ]);
+
+        $customer = StripeCustomer::retrieve($client->stripe_id);
+        $customer->source = $request->stripeToken;
+        $customer->save();
+
+        $client->card_last_four = $customer->sources->data[0]->last4;
+        $client->card_exp_month = $customer->sources->data[0]->exp_month;
+        $client->card_exp_year = $customer->sources->data[0]->exp_year;
+        $client->card_brand = $customer->sources->data[0]->brand;
+
+        $client->save();
+
+        return $this->redirectRouteWithSuccess('clients.index', 'The client\'s card has been swapped.');
+    }
 }
