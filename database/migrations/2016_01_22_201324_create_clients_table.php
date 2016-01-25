@@ -17,6 +17,10 @@ class CreateClientsTable extends Migration
             $table->string('stripe_id');
             $table->string('email')->unique();
             $table->string('name')->nullable();
+            $table->integer('card_last_four');
+            $table->integer('card_exp_month');
+            $table->integer('card_exp_year');
+            $table->string('card_brand');
             $table->string('address')->nullable();
             $table->string('address2')->nullable();
             $table->string('city')->nullable();

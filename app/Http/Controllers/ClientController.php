@@ -37,6 +37,10 @@ class ClientController extends Controller
 
             $client->email = $customer->email;
             $client->name = $customer->description;
+            $client->card_last_four = $customer->sources->data[0]->last4;
+            $client->card_exp_month = $customer->sources->data[0]->exp_month;
+            $client->card_exp_year = $customer->sources->data[0]->exp_year;
+            $client->card_brand = $customer->sources->data[0]->brand;
             $client->save();
         }
 
@@ -78,7 +82,13 @@ class ClientController extends Controller
             'email' => $request->email,
         ]);
 
-        Client::create(array_merge($request->all(), ['stripe_id' => $customer->id]));
+        Client::create(array_merge($request->all(), [
+            'stripe_id' => $customer->id,
+            'card_last_four' => $customer->sources->data[0]->last4,
+            'card_exp_month' => $customer->sources->data[0]->exp_month,
+            'card_exp_year' => $customer->sources->data[0]->exp_year,
+            'card_brand' => $customer->sources->data[0]->brand,
+        ]));
 
         return $this->redirectRouteWithSuccess('clients.index', 'The client has been created.');
     }
@@ -133,9 +143,12 @@ class ClientController extends Controller
         $client->state = $request->state;
         $client->zip = $request->zip;
         $client->phone = $request->phone;
+        $client->card_last_four = $customer->sources->data[0]->last4;
+        $client->card_exp_month = $customer->sources->data[0]->exp_month;
+        $client->card_exp_year = $customer->sources->data[0]->exp_year;
+        $client->card_brand = $customer->sources->data[0]->brand;
 
         $client->save();
-        // @todo: Edit customer in Stripe
 
         return $this->redirectRouteWithSuccess('clients.index', 'The client has been updated.');
     }

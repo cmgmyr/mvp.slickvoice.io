@@ -19,7 +19,7 @@ class Client extends Model
      * @var array
      */
     protected $fillable = [
-        'stripe_id', 'email', 'name', 'address', 'address2', 'city', 'state', 'zip', 'phone',
+        'stripe_id', 'email', 'name', 'card_last_four', 'card_exp_month', 'card_exp_year', 'card_brand', 'address', 'address2', 'city', 'state', 'zip', 'phone',
     ];
 
     /**
@@ -30,4 +30,26 @@ class Client extends Model
     protected $hidden = [
         'stripe_id',
     ];
+
+    /**
+     * Returns a CC brand class used in Font Awesome.
+     *
+     * @return string
+     */
+    public function getCardBrandClassAttribute()
+    {
+        if($this->card_brand == 'American Express') {
+            return 'cc-amex';
+        }
+
+        if ($this->card_brand == 'MasterCard') {
+            return 'cc-mastercard';
+        }
+
+        if ($this->card_brand == 'Visa') {
+            return 'cc-visa';
+        }
+
+        return 'cc-stripe';
+    }
 }

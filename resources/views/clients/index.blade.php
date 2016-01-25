@@ -16,6 +16,7 @@
                     <td>Name</td>
                     <td>Email</td>
                     <td>Phone</td>
+                    <td>Card</td>
                     <td>Manage</td>
                 </tr>
             </thead>
@@ -26,6 +27,10 @@
                 <td>{{ $client->name }}</td>
                 <td><a href="mailto: {{ $client->email }}">{{ $client->email }}</a></td>
                 <td>{{ $client->phone }}</td>
+                <td>
+                    <span class="fa fa-{{ $client->card_brand_class }}"></span>
+                    {{ $client->card_last_four }} <span class="text-muted">({{ $client->card_exp_month }}/{{ $client->card_exp_year }})</span>
+                </td>
                 <td>
                     <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-info btn-xs">Edit</a>
 
