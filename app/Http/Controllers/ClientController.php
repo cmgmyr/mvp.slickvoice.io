@@ -65,10 +65,19 @@ class ClientController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:clients|max:255',
+            'card_number' => 'required',
+            'csv' => 'required',
+            'exp_month' => 'required',
+            'exp_year' => 'required',
         ]);
 
-        CLient::create($request->all());
-        // @todo: Create customer in Stripe
+        $customer = StripeCustomer::create([
+            'source' => $request->stripeToken,
+            'description' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        Client::create(array_merge($request->all(), ['stripe_id' => $customer->id]));
 
         return $this->redirectRouteWithSuccess('clients.index', 'The client has been created.');
     }
