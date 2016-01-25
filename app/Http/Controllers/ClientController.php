@@ -2,6 +2,7 @@
 
 namespace Sv\Http\Controllers;
 
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Stripe\Customer as StripeCustomer;
@@ -119,6 +120,11 @@ class ClientController extends Controller
             'email' => 'required|email|unique:clients,email,' . $id . '|max:255',
         ]);
 
+        $customer = StripeCustomer::retrieve($client->stripe_id);
+        $customer->description = $request->name;
+        $customer->email = $request->email;
+        $customer->save();
+
         $client->name = $request->name;
         $client->email = $request->email;
         $client->address = $request->address;
@@ -144,14 +150,16 @@ class ClientController extends Controller
     {
         try {
             $client = Client::findOrFail($id);
+
+            $customer = StripeCustomer::retrieve($client->stripe_id);
+            $customer->delete();
+
+            $client->delete();
         } catch (ModelNotFoundException $e) {
             $this->redirectBackWithError('The client was not found, please try again.');
+        } catch (Exception $e) {
+            $this->redirectBackWithError('Something unknown went wrong, please try again.');
         }
-
-        $stripe_id = $client->stripe_id;
-        // @todo: Delete customer in Stripe
-
-        $client->delete();
 
         return $this->redirectRouteWithSuccess('clients.index', 'The client has been deleted.');
     }
