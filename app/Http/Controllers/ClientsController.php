@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Stripe\Customer as StripeCustomer;
 use Sv\Client;
 
-class ClientController extends Controller
+class ClientsController extends Controller
 {
     /**
      * Display a listing of the resource.

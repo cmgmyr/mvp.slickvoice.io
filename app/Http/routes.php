@@ -6,15 +6,15 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'clients'], function () {
-            Route::get('/', ['as' => 'clients.index', 'uses' => 'ClientController@index']);
-            Route::get('create', ['as' => 'clients.create', 'uses' => 'ClientController@create']);
-            Route::get('import', ['as' => 'clients.import', 'uses' => 'ClientController@import']);
-            Route::post('/', ['as' => 'clients.store', 'uses' => 'ClientController@store']);
-            Route::get('{id}/edit', ['as' => 'clients.edit', 'uses' => 'ClientController@edit']);
-            Route::put('{id}', ['as' => 'clients.update', 'uses' => 'ClientController@update']);
-            Route::get('{id}/card', ['as' => 'clients.card-edit', 'uses' => 'ClientController@editCard']);
-            Route::put('{id}/card', ['as' => 'clients.card-update', 'uses' => 'ClientController@updateCard']);
-            Route::delete('{id}', ['as' => 'clients.destroy', 'uses' => 'ClientController@destroy']);
+            Route::get('/', ['as' => 'clients.index', 'uses' => 'ClientsController@index']);
+            Route::get('create', ['as' => 'clients.create', 'uses' => 'ClientsController@create']);
+            Route::get('import', ['as' => 'clients.import', 'uses' => 'ClientsController@import']);
+            Route::post('/', ['as' => 'clients.store', 'uses' => 'ClientsController@store']);
+            Route::get('{id}/edit', ['as' => 'clients.edit', 'uses' => 'ClientsController@edit']);
+            Route::put('{id}', ['as' => 'clients.update', 'uses' => 'ClientsController@update']);
+            Route::get('{id}/card', ['as' => 'clients.card-edit', 'uses' => 'ClientsController@editCard']);
+            Route::put('{id}/card', ['as' => 'clients.card-update', 'uses' => 'ClientsController@updateCard']);
+            Route::delete('{id}', ['as' => 'clients.destroy', 'uses' => 'ClientsController@destroy']);
         });
     });
 
