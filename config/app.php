@@ -214,6 +214,7 @@ return [
         // Package Facades
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
+        'Uuid'      => Webpatser\Uuid\Uuid::class,
 
         // Application Facades
         'Flash'     => Sv\Notifications\Flash::class,
