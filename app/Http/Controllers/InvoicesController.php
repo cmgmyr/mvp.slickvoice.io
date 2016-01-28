@@ -4,6 +4,7 @@ namespace Sv\Http\Controllers;
 
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Sv\Client;
@@ -122,7 +123,16 @@ class InvoicesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $invoice = Invoice::findOrFail($id);
+            $invoice->items()->delete();
+            $invoice->delete();
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The invoice was not found, please try again.');
+        }
+
+        return $this->redirectRouteWithSuccess('invoices.index', 'The invoice has been deleted.');
+    }
 
     /**
      * Returns a partial for an editable invoice item.
