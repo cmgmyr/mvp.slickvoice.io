@@ -32,6 +32,16 @@ class Client extends Model
     ];
 
     /**
+     * Client has many invoices.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    /**
      * Returns a CC brand class used in Font Awesome.
      *
      * @return string
