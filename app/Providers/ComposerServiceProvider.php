@@ -23,6 +23,10 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // all views
         view()->composer('*', 'Sv\Http\Composers\AppComposer');
+
+        // invoice views
+        view()->composer('invoices.*', 'Sv\Http\Composers\InvoiceComposer');
     }
 }

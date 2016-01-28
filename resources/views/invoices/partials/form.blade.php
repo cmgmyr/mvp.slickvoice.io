@@ -1,4 +1,14 @@
 <div class="row">
+    <div class="col-md-1">
+        <div class="form-group">
+            <!-- Status Form Input -->
+            <div class="form-group">
+                {{ Form::label('status', 'Status', ['class' => 'control-label']) }}
+                <p class="form-control-static"><span class="btn btn-xs btn-info">Pending</span></p>
+            </div>
+        </div>
+    </div>
+
     <div class="col-md-4">
         <!-- Client Form Input -->
         <div class="form-group">
@@ -7,7 +17,15 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <!-- Repeat Form Input -->
+        <div class="form-group">
+            {{ Form::label('repeat', 'Repeat?', ['class' => 'control-label']) }}
+            {!! Form::select('repeat', $invoiceRepeatOptions, $invoice->repeat, ['class' => 'form-control']) !!}
+        </div>
+    </div>
+
+    <div class="col-md-3">
         <!-- Due Date Form Input -->
         <div class="form-group">
             {{ Form::label('due_date', 'Due Date', ['class' => 'control-label']) }}
@@ -15,7 +33,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-1">
         <div class="form-group text-right">
             <label for="total" class="control-label">Total</label>
             <p class="form-control-static">$<span id="invoice-total">{{ number_format($invoice->items->sum('price'), 2) }}</span></p>

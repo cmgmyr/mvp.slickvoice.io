@@ -11,20 +11,24 @@
         <table class="table table-condensed table-hover table-bordered table-striped">
             <thead>
             <tr>
+                <td>Status</td>
                 <td>ID</td>
                 <td>Client</td>
                 <td>Due Date</td>
                 <td>Total</td>
+                <td>Repeat?</td>
                 <td>Manage</td>
             </tr>
             </thead>
             <tbody>
             @foreach($invoices as $invoice)
                 <tr>
+                    <td>{{ $invoice->status }}</td>
                     <td>{{ $invoice->id }}</td>
                     <td>{{ $invoice->client->name }}</td>
                     <td>{{ $invoice->due_date->format('m/d/Y') }}</td>
                     <td>${{ number_format($invoice->items->sum('price'), 2) }}</td>
+                    <td>{{ $invoice->repeat == 'no' ? '' : 'per ' . $invoice->repeat }}</td>
                     <td>
                         <a href="{{ route('invoices.edit', $invoice->id) }}" class="btn btn-info btn-xs">Edit</a>
 
