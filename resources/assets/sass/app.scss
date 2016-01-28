@@ -75,3 +75,12 @@ h1, h2, h3, h4, h5, h6 {
     padding: 14px 24px;
     font-size: 21px;
 }
+
+/*
+ * Invoices
+ */
+#invoice-items-sortable {
+    .row {
+        cursor: move;
+    }
+}

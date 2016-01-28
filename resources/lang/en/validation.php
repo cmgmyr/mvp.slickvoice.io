@@ -89,8 +89,11 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'description.*' => [
+            'required' => 'A description for a line item is required.',
+        ],
+        'price.*' => [
+            'required' => 'A price for a line item is required.',
         ],
     ],
 

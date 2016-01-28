@@ -25,6 +25,8 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('{id}/edit', ['as' => 'invoices.edit', 'uses' => 'InvoicesController@edit']);
             Route::put('{id}', ['as' => 'invoices.update', 'uses' => 'InvoicesController@update']);
             Route::delete('{id}', ['as' => 'invoices.destroy', 'uses' => 'InvoicesController@destroy']);
+
+            Route::get('items/create', ['as' => 'invoices.items.create', 'uses' => 'InvoicesController@itemCreate']);
         });
     });
 

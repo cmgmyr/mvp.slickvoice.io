@@ -2,9 +2,13 @@
 
 namespace Sv\Http\Controllers;
 
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
-use Sv\Http\Requests;
+use Illuminate\Support\Facades\DB;
+use Sv\Client;
 use Sv\Invoice;
+use Sv\InvoiceItem;
 
 class InvoicesController extends Controller
 {
@@ -27,7 +31,10 @@ class InvoicesController extends Controller
      */
     public function create()
     {
-        //
+        $invoice = new Invoice();
+        $clients = Client::orderBy('name', 'ASC')->lists('name', 'id');
+
+        return view('invoices.create', compact('invoice', 'clients'));
     }
 
     /**
@@ -38,7 +45,39 @@ class InvoicesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'client_id' => 'required',
+            'due_date' => 'required',
+            'description.0' => 'required',
+            'price.0' => 'required',
+        ]);
+
+        try {
+            DB::transaction(function () use ($request) {
+                $items = [];
+
+                foreach ($request->description as $index => $value) {
+                    if ($request->description[$index] != '' && $request->price[$index] != '') {
+                        $items[] = InvoiceItem::create([
+                            'description' => $request->description[$index],
+                            'price' => $request->price[$index],
+                            'sort' => $index,
+                        ]);
+                    }
+                }
+
+                $invoice = Invoice::create([
+                    'client_id' => $request->client_id,
+                    'due_date' => Carbon::createFromFormat('Y-m-d', $request->due_date),
+                ]);
+
+                $invoice->items()->saveMany($items);
+            });
+        } catch (Exception $e) {
+            return $this->redirectBackWithError('Sorry, the invoice did not save. Please check your data and try again. -- ' . $e->getMessage());
+        }
+
+        return $this->redirectRouteWithSuccess('invoices.index', 'The invoice has been created.');
     }
 
     /**
@@ -84,5 +123,14 @@ class InvoicesController extends Controller
     public function destroy($id)
     {
         //
+
+    /**
+     * Returns a partial for an editable invoice item.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function itemCreate()
+    {
+        return view('invoices.partials.invoice-item-editable');
     }
 }
