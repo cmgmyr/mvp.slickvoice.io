@@ -90,10 +90,10 @@ return [
 
     'custom' => [
         'description.*' => [
-            'required' => 'A description for a line item is required.',
+            'required' => 'A description for the first line item is required.',
         ],
         'price.*' => [
-            'required' => 'A price for a line item is required.',
+            'required' => 'A price for the first line item is required.',
         ],
     ],
 

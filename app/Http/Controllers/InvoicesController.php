@@ -34,8 +34,9 @@ class InvoicesController extends Controller
     {
         $invoice = new Invoice();
         $clients = Client::orderBy('name', 'ASC')->lists('name', 'id');
+        $items = $this->getOldItems();
 
-        return view('invoices.create', compact('invoice', 'clients'));
+        return view('invoices.create', compact('invoice', 'clients', 'items'));
     }
 
     /**
@@ -100,7 +101,16 @@ class InvoicesController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $invoice = Invoice::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The invoice was not found, please try again.');
+        }
+
+        $clients = Client::orderBy('name', 'ASC')->lists('name', 'id');
+        $items = $this->getOldItems();
+
+        return view('invoices.edit', compact('invoice', 'clients', 'items'));
     }
 
     /**
@@ -112,7 +122,45 @@ class InvoicesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $invoice = Invoice::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The invoice was not found, please try again.');
+        }
+
+        $this->validate($request, [
+            'client_id' => 'required',
+            'due_date' => 'required',
+            'description.0' => 'required',
+            'price.0' => 'required',
+        ]);
+
+        try {
+            DB::transaction(function () use ($request, $invoice) {
+                $invoice->items()->delete();
+
+                $items = [];
+
+                foreach ($request->description as $index => $value) {
+                    if ($request->description[$index] != '' && $request->price[$index] != '') {
+                        $items[] = InvoiceItem::create([
+                            'description' => $request->description[$index],
+                            'price' => $request->price[$index],
+                            'sort' => $index,
+                        ]);
+                    }
+                }
+
+                $invoice->client_id = $request->client_id;
+                $invoice->due_date = Carbon::createFromFormat('Y-m-d', $request->due_date);
+                $invoice->save();
+                $invoice->items()->saveMany($items);
+            });
+        } catch (Exception $e) {
+            return $this->redirectBackWithError('Sorry, the invoice did not save. Please check your data and try again. -- ' . $e->getMessage());
+        }
+
+        return $this->redirectRouteWithSuccess('invoices.index', 'The invoice has been updated.');
     }
 
     /**
@@ -141,6 +189,29 @@ class InvoicesController extends Controller
      */
     public function itemCreate()
     {
-        return view('invoices.partials.invoice-item-editable');
+        $item = [];
+
+        return view('invoices.partials.invoice-item-editable', compact('item'));
+    }
+
+    /**
+     * Returns old input items when available.
+     *
+     * @return array
+     */
+    protected function getOldItems()
+    {
+        $items = [];
+        $descriptions = old('description', []);
+        $prices = old('price', []);
+        $total = max(count($descriptions), count($prices));
+        for ($x = 0; $x < $total; $x++) {
+            $items[] = [
+                'description' => array_get($descriptions, $x, null),
+                'price'       => array_get($prices, $x, null),
+            ];
+        }
+
+        return $items;
     }
 }

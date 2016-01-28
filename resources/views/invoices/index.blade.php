@@ -23,7 +23,7 @@
                 <tr>
                     <td>{{ $invoice->id }}</td>
                     <td>{{ $invoice->client->name }}</td>
-                    <td>{{ $invoice->due_date->format('d/m/Y') }}</td>
+                    <td>{{ $invoice->due_date->format('m/d/Y') }}</td>
                     <td>${{ number_format($invoice->items->sum('price'), 2) }}</td>
                     <td>
                         <a href="{{ route('invoices.edit', $invoice->id) }}" class="btn btn-info btn-xs">Edit</a>

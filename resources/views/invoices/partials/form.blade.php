@@ -2,7 +2,7 @@
     <div class="col-md-4">
         <!-- Client Form Input -->
         <div class="form-group">
-            <label for="client_id" class="control-label">Client</label>
+            {{ Form::label('client_id', 'Client', ['class' => 'control-label']) }}
             {!! Form::select('client_id', $clients, $invoice->client_id, ['class' => 'form-control']) !!}
         </div>
     </div>
@@ -10,15 +10,15 @@
     <div class="col-md-4">
         <!-- Due Date Form Input -->
         <div class="form-group">
-            <label for="due_date" class="control-label">Due Date</label>
-            <input type="date" id="due_date" name="due_date" class="form-control" required value="{{ old('due_date') }}">
+            {{ Form::label('due_date', 'Due Date', ['class' => 'control-label']) }}
+            {{ Form::date('due_date', $invoice->due_date, ['class' => 'form-control', 'required' => 'required']) }}
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="form-group text-right">
             <label for="total" class="control-label">Total</label>
-            <p class="form-control-static">$<span id="invoice-total">0.00</span></p>
+            <p class="form-control-static">$<span id="invoice-total">{{ number_format($invoice->items->sum('price'), 2) }}</span></p>
         </div>
     </div>
 </div>
@@ -28,7 +28,17 @@
     <div id="invoice-items" class="col-md-10 col-md-push-1">
         <h2>Invoice Items</h2>
         <div id="invoice-items-sortable">
-            @include('invoices.partials.invoice-item-editable')
+            @if(isset($items) && count($items) > 0)
+                @foreach($items as $item)
+                    @include('invoices.partials.invoice-item-editable', ['item' => $item])
+                @endforeach
+            @elseif($invoice->items->count() > 0)
+                @foreach($invoice->items as $item)
+                    @include('invoices.partials.invoice-item-editable', ['item' => $item->toArray()])
+                @endforeach
+            @else
+                @include('invoices.partials.invoice-item-editable', ['item' => []])
+            @endif
         </div>
 
         <div class="row">

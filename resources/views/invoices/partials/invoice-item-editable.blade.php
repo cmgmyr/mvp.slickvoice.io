@@ -6,14 +6,14 @@
     </div>
     <div class="col-md-7">
         <div class="form-group">
-            <input type="text" name="description[]" placeholder="Description" class="invoice-item-description form-control" value="">
+            <input type="text" name="description[]" placeholder="Description" class="invoice-item-description form-control" value="{{ array_get($item, 'description', null) }}">
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-addon">$</span>
-                <input type="text" name="price[]" placeholder="0.00" class="invoice-item-price form-control" value="">
+                <input type="text" name="price[]" placeholder="0.00" class="invoice-item-price form-control" value="{{ array_get($item, 'price', null) }}">
             </div>
         </div>
     </div>
