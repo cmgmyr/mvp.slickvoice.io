@@ -16,6 +16,16 @@ Route::group(['middleware' => 'web'], function () {
             Route::put('{id}/card', ['as' => 'clients.card-update', 'uses' => 'ClientsController@updateCard']);
             Route::delete('{id}', ['as' => 'clients.destroy', 'uses' => 'ClientsController@destroy']);
         });
+
+        Route::group(['prefix' => 'invoices'], function () {
+            Route::get('/', ['as' => 'invoices.index', 'uses' => 'InvoicesController@index']);
+            Route::get('create', ['as' => 'invoices.create', 'uses' => 'InvoicesController@create']);
+            Route::post('/', ['as' => 'invoices.store', 'uses' => 'InvoicesController@store']);
+            Route::get('{id}', ['as' => 'invoices.show', 'uses' => 'InvoicesController@show']);
+            Route::get('{id}/edit', ['as' => 'invoices.edit', 'uses' => 'InvoicesController@edit']);
+            Route::put('{id}', ['as' => 'invoices.update', 'uses' => 'InvoicesController@update']);
+            Route::delete('{id}', ['as' => 'invoices.destroy', 'uses' => 'InvoicesController@destroy']);
+        });
     });
 
     // Authentication Routes...
