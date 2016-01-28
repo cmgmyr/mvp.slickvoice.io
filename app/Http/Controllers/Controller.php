@@ -40,7 +40,7 @@ class Controller extends BaseController
     {
         Flash::error($message);
 
-        return redirect()->route($route, $params);
+        return redirect()->route($route, $params)->withInput();
     }
 
     /**
@@ -66,6 +66,6 @@ class Controller extends BaseController
     {
         Flash::error($message);
 
-        return redirect()->back();
+        return redirect()->back()->withInput();
     }
 }
