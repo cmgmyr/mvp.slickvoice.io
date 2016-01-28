@@ -4,6 +4,7 @@ namespace Sv\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Sv\Http\Requests;
+use Sv\Invoice;
 
 class InvoicesController extends Controller
 {
@@ -14,7 +15,9 @@ class InvoicesController extends Controller
      */
     public function index()
     {
-        //
+        $invoices = Invoice::orderBy('due_date', 'ASC')->simplePaginate(15);
+
+        return view('invoices.index', compact('invoices'));
     }
 
     /**
