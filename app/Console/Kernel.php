@@ -4,6 +4,7 @@ namespace Sv\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Sv\Console\Commands\ProcessInvoices;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\Inspire::class,
+        ProcessInvoices::class,
     ];
 
     /**
@@ -24,7 +25,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
+        $schedule->command('sv:process-invoices')->hourly();
     }
 }
