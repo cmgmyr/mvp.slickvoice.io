@@ -2,12 +2,14 @@
 
 namespace Sv\Jobs;
 
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Stripe\Charge as StripeCharge;
-use Stripe\Error\Card as CardDeclined;
 use Sv\Invoice;
 
 class PayInvoice extends Job implements ShouldQueue
@@ -49,6 +51,7 @@ class PayInvoice extends Job implements ShouldQueue
 
             $this->invoice->status = 'paid';
             $this->invoice->charge_id = $charge->id;
+            $this->invoice->charge_date = Carbon::today();
             $this->invoice->save();
 
             if ($this->invoice->repeat != 'no') {
@@ -59,7 +62,8 @@ class PayInvoice extends Job implements ShouldQueue
                 $this->invoice->repeat = 'no';
                 $this->invoice->save();
             }
-        } catch (CardDeclined $e) {
+        } catch (Exception $e) {
+            Log::error('Invoice #' . $this->invoice->id . ' did not process: (' . $e->getCode() . ') - ' . $e->getMessage());
             $this->tryAgain();
         }
     }
@@ -70,7 +74,12 @@ class PayInvoice extends Job implements ShouldQueue
     protected function tryAgain()
     {
         $this->invoice->status = 'overdue';
-        $this->invoice->due_date = $this->invoice->due_date->addDay();
+        if ($this->invoice->num_tries >= 3) {
+            $this->invoice->status = 'error';
+        }
+
+        $this->invoice->try_on_date = Carbon::tomorrow();
+        $this->invoice->increment('num_tries');
         $this->invoice->save();
     }
 }

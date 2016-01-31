@@ -27,7 +27,9 @@
                         @if($invoice->status == 'paid')
                             <span class="btn btn-xs btn-success">Paid</span>
                         @elseif($invoice->status == 'overdue')
-                            <span class="btn btn-xs btn-danger">Overdue</span>
+                            <span class="btn btn-xs btn-warning">Overdue</span>
+                        @elseif($invoice->status == 'error')
+                            <span class="btn btn-xs btn-danger">Error</span>
                         @else
                             <span class="btn btn-xs btn-info">Pending</span>
                         @endif

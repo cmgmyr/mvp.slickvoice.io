@@ -75,6 +75,8 @@ class InvoicesController extends Controller
                 $invoice = Invoice::create([
                     'client_id' => $request->client_id,
                     'due_date' => Carbon::createFromFormat('Y-m-d', $request->due_date),
+                    'try_on_date' => Carbon::createFromFormat('Y-m-d', $request->due_date),
+                    'num_tries' => 0,
                     'status' => 'pending',
                     'repeat' => $request->repeat,
                 ]);
@@ -160,6 +162,9 @@ class InvoicesController extends Controller
                 $invoice->client_id = $request->client_id;
                 $invoice->repeat = $request->repeat;
                 $invoice->due_date = Carbon::createFromFormat('Y-m-d', $request->due_date);
+                if ($invoice->try_on_date->gt($invoice->due_date)) {
+                    $invoice->try_on_date = $invoice->due_date;
+                }
 
                 $invoice->save();
                 $invoice->items()->saveMany($items);

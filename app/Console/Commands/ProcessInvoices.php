@@ -33,7 +33,7 @@ class ProcessInvoices extends Command
      */
     public function handle()
     {
-        $invoices = Invoice::where('status', 'pending')->whereDate('due_date', '<=', Carbon::now())->get();
+        $invoices = Invoice::whereIn('status', ['pending', 'overdue'])->where('num_tries', '<=', 3)->whereDate('try_on_date', '<=', Carbon::now())->get();
         if ($invoices->count() > 0) {
             foreach ($invoices as $invoice) {
                 $this->dispatch(new PayInvoice($invoice));

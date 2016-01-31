@@ -22,7 +22,7 @@ class Invoice extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'client_id', 'due_date', 'status', 'repeat', 'charge_id',
+        'uuid', 'client_id', 'due_date', 'try_on_date', 'num_tries', 'status', 'repeat', 'charge_id', 'charge_date',
     ];
 
     /**
@@ -31,7 +31,7 @@ class Invoice extends Model
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at', 'due_date',
+        'created_at', 'updated_at', 'due_date', 'try_on_date', 'charge_date',
     ];
 
     /**

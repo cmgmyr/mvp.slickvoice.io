@@ -17,9 +17,12 @@ class CreateInvoicesTable extends Migration
             $table->uuid('uuid');
             $table->integer('client_id');
             $table->date('due_date');
-            $table->enum('status', ['pending', 'paid', 'overdue'])->default('pending');
+            $table->date('try_on_date');
+            $table->tinyInteger('num_tries')->default(0);
+            $table->enum('status', ['pending', 'paid', 'overdue', 'error'])->default('pending');
             $table->enum('repeat', ['no', 'month', 'year'])->default('no');
             $table->string('charge_id')->nullable();
+            $table->date('charge_date')->nullable();
             $table->timestamps();
         });
     }
