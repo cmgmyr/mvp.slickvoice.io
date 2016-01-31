@@ -23,7 +23,15 @@
             <tbody>
             @foreach($invoices as $invoice)
                 <tr>
-                    <td>{{ $invoice->status }}</td>
+                    <td>
+                        @if($invoice->status == 'paid')
+                            <span class="btn btn-xs btn-success">Paid</span>
+                        @elseif($invoice->status == 'overdue')
+                            <span class="btn btn-xs btn-danger">Overdue</span>
+                        @else
+                            <span class="btn btn-xs btn-info">Pending</span>
+                        @endif
+                    </td>
                     <td>{{ $invoice->id }}</td>
                     <td>{{ $invoice->client->name }}</td>
                     <td>{{ $invoice->due_date->format('m/d/Y') }}</td>
