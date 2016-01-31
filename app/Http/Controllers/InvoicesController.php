@@ -32,8 +32,12 @@ class InvoicesController extends Controller
      */
     public function create()
     {
-        $invoice = new Invoice();
         $clients = Client::orderBy('name', 'ASC')->lists('name', 'id');
+        if ($clients->count() == 0) {
+            return $this->redirectRouteWithError('clients.create', 'You need to add a client before adding an invoice.');
+        }
+
+        $invoice = new Invoice();
         $items = $this->getOldItems();
 
         return view('invoices.create', compact('invoice', 'clients', 'items'));
