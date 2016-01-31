@@ -53,7 +53,7 @@ class InvoicesController extends Controller
     {
         $this->validate($request, [
             'client_id' => 'required',
-            'due_date' => 'required',
+            'due_date' => 'required|date',
             'description.0' => 'required',
             'price.0' => 'required',
         ]);
