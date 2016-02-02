@@ -99,7 +99,13 @@ class InvoicesController extends Controller
      */
     public function show($uuid)
     {
-        //
+        try {
+            $invoice = Invoice::whereUuid($uuid)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The invoice was not found, please try again.');
+        }
+
+        return view('invoices.show', compact('invoice'));
     }
 
     /**
