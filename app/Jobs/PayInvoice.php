@@ -54,6 +54,8 @@ class PayInvoice extends Job implements ShouldQueue
             $this->invoice->charge_date = Carbon::today();
             $this->invoice->save();
 
+            $this->dispatch(new AddInvoiceFee($this->invoice, $charge->balance_transaction));
+
             if ($this->invoice->repeat != 'no') {
                 // duplicate the invoice
                 $this->dispatch(new DuplicateInvoice($this->invoice));
