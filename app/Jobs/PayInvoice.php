@@ -43,10 +43,10 @@ class PayInvoice extends Job implements ShouldQueue
 
         try {
             $charge = StripeCharge::create([
-                "amount" => $total,
-                "currency" => "usd",
-                "customer" => $stripe_id,
-                "description" => "SlickVoice Invoice ID: " . $this->invoice->id,
+                'amount' => $total,
+                'currency' => 'usd',
+                'customer' => $stripe_id,
+                'description' => 'SlickVoice Invoice ID: ' . $this->invoice->id,
             ]);
 
             $this->invoice->status = 'paid';
