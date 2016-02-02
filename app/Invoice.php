@@ -22,7 +22,7 @@ class Invoice extends Model
      * @var array
      */
     protected $fillable = [
-        'uuid', 'client_id', 'due_date', 'try_on_date', 'num_tries', 'status', 'repeat', 'charge_id', 'charge_date',
+        'uuid', 'public_id', 'client_id', 'due_date', 'try_on_date', 'num_tries', 'status', 'repeat', 'charge_id', 'charge_date',
     ];
 
     /**
@@ -52,5 +52,17 @@ class Invoice extends Model
     public function items()
     {
         return $this->hasMany(InvoiceItem::class);
+    }
+
+    /**
+     * Generates the next public invoice number.
+     *
+     * @return int
+     */
+    public static function getNextPublicId()
+    {
+        $max = self::withTrashed()->max('public_id');
+
+        return $max >= 1000 ? ++$max : 1000;
     }
 }

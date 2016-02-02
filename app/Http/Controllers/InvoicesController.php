@@ -74,6 +74,7 @@ class InvoicesController extends Controller
 
                 $invoice = Invoice::create([
                     'client_id' => $request->client_id,
+                    'public_id' => Invoice::getNextPublicId(),
                     'due_date' => Carbon::createFromFormat('Y-m-d', $request->due_date),
                     'try_on_date' => Carbon::createFromFormat('Y-m-d', $request->due_date),
                     'num_tries' => 0,

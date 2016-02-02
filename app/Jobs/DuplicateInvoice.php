@@ -34,6 +34,7 @@ class DuplicateInvoice extends Job implements ShouldQueue
     public function handle()
     {
         $newInvoice = $this->invoice->replicate();
+        $newInvoice->public_id = Invoice::getNextPublicId();
         $newInvoice->due_date = $this->invoice->due_date->{camel_case('add' . $this->invoice->repeat)}();
         $newInvoice->try_on_date = $newInvoice->due_date;
         $newInvoice->num_tries = 0;
