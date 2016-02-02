@@ -23,6 +23,7 @@ Route::group(['middleware' => 'web'], function () {
             Route::post('/', ['as' => 'invoices.store', 'uses' => 'InvoicesController@store']);
             Route::get('{uuid}', ['as' => 'invoices.show', 'uses' => 'InvoicesController@show']);
             Route::get('{uuid}/edit', ['as' => 'invoices.edit', 'uses' => 'InvoicesController@edit']);
+            Route::get('{uuid}/refresh', ['as' => 'invoices.refresh', 'uses' => 'InvoicesController@refresh']);
             Route::put('{uuid}', ['as' => 'invoices.update', 'uses' => 'InvoicesController@update']);
             Route::delete('{uuid}', ['as' => 'invoices.destroy', 'uses' => 'InvoicesController@destroy']);
 

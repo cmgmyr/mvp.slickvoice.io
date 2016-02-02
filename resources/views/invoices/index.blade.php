@@ -42,6 +42,7 @@
                     <td>
                         @if($invoice->status != 'paid')
                             <a href="{{ route('invoices.edit', $invoice->uuid) }}" class="btn btn-info btn-xs"><span class="fa fa-pencil"></span></a>
+                            <a href="{{ route('invoices.refresh', $invoice->uuid) }}" class="btn btn-success btn-xs"><span class="fa fa-refresh"></span></a>
 
                             <form method="post" action="{{ route('invoices.destroy', $invoice->uuid) }}" style="display:inline;"
                                   data-confirm="Are you sure?" class="delete-confirm">

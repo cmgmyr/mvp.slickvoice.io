@@ -178,6 +178,28 @@ class InvoicesController extends Controller
     }
 
     /**
+     * Refresh the invoice.
+     *
+     * @param  string  $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function refresh($uuid)
+    {
+        try {
+            $invoice = Invoice::whereUuid($uuid)->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            $this->redirectBackWithError('The invoice was not found, please try again.');
+        }
+
+        $invoice->num_tries = 0;
+        $invoice->try_on_date = Carbon::today();
+        $invoice->status = 'overdue';
+        $invoice->save();
+
+        return $this->redirectRouteWithSuccess('invoices.index', 'The invoice has been refreshed.');
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  string  $uuid
