@@ -3,11 +3,12 @@
 namespace Sv;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Sv\Traits\UuidModelTrait;
 
 class Invoice extends Model
 {
-    use UuidModelTrait;
+    use UuidModelTrait, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -31,7 +32,7 @@ class Invoice extends Model
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at', 'due_date', 'try_on_date', 'charge_date',
+        'created_at', 'updated_at', 'deleted_at', 'due_date', 'try_on_date', 'charge_date',
     ];
 
     /**

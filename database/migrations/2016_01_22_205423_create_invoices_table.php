@@ -25,6 +25,7 @@ class CreateInvoicesTable extends Migration
             $table->string('charge_id')->nullable();
             $table->date('charge_date')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
