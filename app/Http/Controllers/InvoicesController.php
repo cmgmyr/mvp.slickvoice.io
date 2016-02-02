@@ -94,10 +94,10 @@ class InvoicesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($uuid)
     {
         //
     }
@@ -105,13 +105,13 @@ class InvoicesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($uuid)
     {
         try {
-            $invoice = Invoice::findOrFail($id);
+            $invoice = Invoice::whereUuid($uuid)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $this->redirectBackWithError('The invoice was not found, please try again.');
         }
@@ -126,13 +126,13 @@ class InvoicesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $uuid)
     {
         try {
-            $invoice = Invoice::findOrFail($id);
+            $invoice = Invoice::whereUuid($uuid)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $this->redirectBackWithError('The invoice was not found, please try again.');
         }
@@ -180,13 +180,13 @@ class InvoicesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $uuid
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($uuid)
     {
         try {
-            $invoice = Invoice::findOrFail($id);
+            $invoice = Invoice::whereUuid($uuid)->firstOrFail();
             $invoice->items()->delete();
             $invoice->delete();
         } catch (ModelNotFoundException $e) {

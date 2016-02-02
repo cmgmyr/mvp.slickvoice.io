@@ -21,10 +21,10 @@ Route::group(['middleware' => 'web'], function () {
             Route::get('/', ['as' => 'invoices.index', 'uses' => 'InvoicesController@index']);
             Route::get('create', ['as' => 'invoices.create', 'uses' => 'InvoicesController@create']);
             Route::post('/', ['as' => 'invoices.store', 'uses' => 'InvoicesController@store']);
-            Route::get('{id}', ['as' => 'invoices.show', 'uses' => 'InvoicesController@show']);
-            Route::get('{id}/edit', ['as' => 'invoices.edit', 'uses' => 'InvoicesController@edit']);
-            Route::put('{id}', ['as' => 'invoices.update', 'uses' => 'InvoicesController@update']);
-            Route::delete('{id}', ['as' => 'invoices.destroy', 'uses' => 'InvoicesController@destroy']);
+            Route::get('{uuid}', ['as' => 'invoices.show', 'uses' => 'InvoicesController@show']);
+            Route::get('{uuid}/edit', ['as' => 'invoices.edit', 'uses' => 'InvoicesController@edit']);
+            Route::put('{uuid}', ['as' => 'invoices.update', 'uses' => 'InvoicesController@update']);
+            Route::delete('{uuid}', ['as' => 'invoices.destroy', 'uses' => 'InvoicesController@destroy']);
 
             Route::get('items/create', ['as' => 'invoices.items.create', 'uses' => 'InvoicesController@itemCreate']);
         });

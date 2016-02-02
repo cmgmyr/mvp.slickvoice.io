@@ -34,20 +34,24 @@
                             <span class="btn btn-xs btn-info">Pending</span>
                         @endif
                     </td>
-                    <td>{{ $invoice->id }}</td>
+                    <td>{{ $invoice->public_id }}</td>
                     <td>{{ $invoice->client->name }}</td>
                     <td>{{ $invoice->due_date->format('m/d/Y') }}</td>
                     <td>${{ number_format($invoice->items->sum('price'), 2) }}</td>
                     <td>{{ $invoice->repeat == 'no' ? '' : 'per ' . $invoice->repeat }}</td>
                     <td>
-                        <a href="{{ route('invoices.edit', $invoice->id) }}" class="btn btn-info btn-xs">Edit</a>
+                        @if($invoice->status != 'paid')
+                            <a href="{{ route('invoices.edit', $invoice->uuid) }}" class="btn btn-info btn-xs"><span class="fa fa-pencil"></span></a>
 
-                        <form method="post" action="{{ route('invoices.destroy', $invoice->id) }}" style="display:inline;"
-                              data-confirm="Are you sure?" class="delete-confirm">
-                            {!! csrf_field() !!}
-                            {!! method_field('delete') !!}
-                            <button type="submit" class="btn btn-danger btn-xs">Delete</button>
-                        </form>
+                            <form method="post" action="{{ route('invoices.destroy', $invoice->uuid) }}" style="display:inline;"
+                                  data-confirm="Are you sure?" class="delete-confirm">
+                                {!! csrf_field() !!}
+                                {!! method_field('delete') !!}
+                                <button type="submit" class="btn btn-danger btn-xs"><span class="fa fa-trash"></span></button>
+                            </form>
+                        @else
+                            <a href="{{ route('invoices.show', $invoice->uuid) }}" class="btn btn-success btn-xs"><span class="fa fa-eye"></span></a>
+                        @endif
                     </td>
                 </tr>
             @endforeach
