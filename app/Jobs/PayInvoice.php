@@ -46,7 +46,7 @@ class PayInvoice extends Job implements ShouldQueue
                 'amount' => $total,
                 'currency' => 'usd',
                 'customer' => $stripe_id,
-                'description' => 'SlickVoice Invoice ID: ' . $this->invoice->id,
+                'description' => 'SlickVoice Invoice ID: ' . $this->invoice->public_id,
             ]);
 
             $this->invoice->status = 'paid';
@@ -58,7 +58,7 @@ class PayInvoice extends Job implements ShouldQueue
 
             if ($this->invoice->repeat != 'no') {
                 // duplicate the invoice
-                $this->dispatch(new DuplicateInvoice($this->invoice));
+                $this->dispatch(new DuplicateInvoice($this->invoice, $this->invoice->repeat));
 
                 // turn off repeating on paid invoice
                 $this->invoice->repeat = 'no';

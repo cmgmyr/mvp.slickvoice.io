@@ -17,13 +17,20 @@ class DuplicateInvoice extends Job implements ShouldQueue
     protected $invoice;
 
     /**
+     * @var string
+     */
+    protected $increment;
+
+    /**
      * Create a new job instance.
      *
      * @param Invoice $invoice
+     * @param string $increment
      */
-    public function __construct(Invoice $invoice)
+    public function __construct(Invoice $invoice, $increment)
     {
         $this->invoice = $invoice;
+        $this->increment = $increment;
     }
 
     /**
@@ -35,7 +42,7 @@ class DuplicateInvoice extends Job implements ShouldQueue
     {
         $newInvoice = $this->invoice->replicate();
         $newInvoice->public_id = Invoice::getNextPublicId();
-        $newInvoice->due_date = $this->invoice->due_date->{camel_case('add' . $this->invoice->repeat)}();
+        $newInvoice->due_date = $this->invoice->due_date->{camel_case('add' . $this->increment)}();
         $newInvoice->try_on_date = $newInvoice->due_date;
         $newInvoice->num_tries = 0;
         $newInvoice->status = 'pending';
