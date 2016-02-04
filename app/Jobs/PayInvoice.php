@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Stripe\Charge as StripeCharge;
+use Sv\Events\InvoiceWasPaid;
 use Sv\Invoice;
 
 class PayInvoice extends Job implements ShouldQueue
@@ -55,6 +56,7 @@ class PayInvoice extends Job implements ShouldQueue
             $this->invoice->save();
 
             $this->dispatch(new AddInvoiceFee($this->invoice, $charge->balance_transaction));
+            event(new InvoiceWasPaid($this->invoice));
 
             if ($this->invoice->repeat != 'no') {
                 // duplicate the invoice

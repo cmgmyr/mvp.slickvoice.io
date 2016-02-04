@@ -13,8 +13,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Sv\Events\SomeEvent' => [
-            'Sv\Listeners\EventListener',
+        'Sv\Events\InvoiceWasPaid' => [
+            'Sv\Listeners\SendClientPaidInvoice',
+            'Sv\Listeners\SendAdminsPaidInvoice',
         ],
     ];
 
