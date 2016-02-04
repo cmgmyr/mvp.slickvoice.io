@@ -20,7 +20,7 @@ class InvoicesController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::orderBy('due_date', 'DESC')->simplePaginate(15);
+        $invoices = Invoice::orderBy('due_date', 'DESC')->orderBy('public_id', 'DESC')->simplePaginate(15);
 
         return view('invoices.index', compact('invoices'));
     }
