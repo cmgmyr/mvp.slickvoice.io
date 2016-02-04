@@ -49,6 +49,7 @@ class DuplicateInvoice extends Job implements ShouldQueue
         $newInvoice->charge_id = null;
         $newInvoice->charge_date = null;
         $newInvoice->charge_fee = 0;
+        $newInvoice->repeat = $this->increment;
         $newInvoice->save();
 
         // replicate invoice items
