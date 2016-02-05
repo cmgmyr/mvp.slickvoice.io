@@ -4,6 +4,7 @@ namespace Sv;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Sv\Traits\UuidModelTrait;
 
 class Invoice extends Model
@@ -65,5 +66,56 @@ class Invoice extends Model
         $max = self::withTrashed()->max('public_id');
 
         return $max >= 1000 ? ++$max : 1000;
+    }
+
+    /**
+     * Returns the totals for all possible invoice statuses.
+     *
+     * @return array
+     */
+    public static function getTotalsByStatuses()
+    {
+        $totals = [];
+        $result = DB::select(DB::raw("SHOW COLUMNS FROM `invoices` LIKE 'status'"));
+        if ($result) {
+            $statuses = explode("','", preg_replace("/(enum|set)\('(.+?)'\)/", '\\2', $result[0]->Type));
+
+            foreach ($statuses as $status) {
+                $totals[$status] = self::getTotalsByStatus($status);
+            }
+        }
+
+        return $totals;
+    }
+
+    /**
+     * Returns the total of the given status.
+     *
+     * @return string
+     */
+    public static function getTotalsByStatus($status)
+    {
+        $invoices = DB::table('invoices')
+            ->select(DB::raw('SUM(invoice_items.price) as total'))
+            ->join('invoice_items', 'invoices.id', '=', 'invoice_items.invoice_id')
+            ->where('invoices.status', $status)
+            ->first();
+
+        return number_format($invoices->total, 2);
+    }
+
+    /**
+     * Sees if $_GET['status'] is available, and add it to the query.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeRequestStatus($query)
+    {
+        if (request('status', false)) {
+            $query->where('status', request('status'));
+        }
+
+        return $query;
     }
 }

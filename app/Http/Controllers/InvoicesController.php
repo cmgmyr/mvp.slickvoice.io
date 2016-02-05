@@ -16,13 +16,20 @@ class InvoicesController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = Invoice::orderBy('due_date', 'DESC')->orderBy('public_id', 'DESC')->simplePaginate(15);
+        $invoices = Invoice::orderBy('due_date', 'DESC')
+            ->orderBy('public_id', 'DESC')
+            ->requestStatus()
+            ->simplePaginate(15)
+            ->appends($request->except('page'));
 
-        return view('invoices.index', compact('invoices'));
+        $totals = Invoice::getTotalsByStatuses();
+
+        return view('invoices.index', compact('invoices', 'totals'));
     }
 
     /**
