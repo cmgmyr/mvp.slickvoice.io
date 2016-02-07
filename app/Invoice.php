@@ -57,6 +57,26 @@ class Invoice extends Model
     }
 
     /**
+     * Get all of the invoice's logs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function logs()
+    {
+        return $this->morphMany('Sv\Log', 'logable');
+    }
+
+    /**
+     * Returns the latest formatted log.
+     *
+     * @return string
+     */
+    public function latestLog()
+    {
+        return $this->logs()->latest()->first()->render();
+    }
+
+    /**
      * Generates the next public invoice number.
      *
      * @return int

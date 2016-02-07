@@ -8,10 +8,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Stripe\Charge as StripeCharge;
+use Sv\Events\InvoiceWasNotPaid;
 use Sv\Events\InvoiceWasPaid;
 use Sv\Invoice;
+use Sv\Log as SvLogger;
 
 class PayInvoice extends Job implements ShouldQueue
 {
@@ -67,7 +68,7 @@ class PayInvoice extends Job implements ShouldQueue
                 $this->invoice->save();
             }
         } catch (Exception $e) {
-            Log::error('Invoice #' . $this->invoice->id . ' did not process: (' . $e->getCode() . ') - ' . $e->getMessage());
+            SvLogger::createFromException($e, $this->invoice);
             $this->tryAgain();
         }
     }
@@ -85,5 +86,7 @@ class PayInvoice extends Job implements ShouldQueue
         $this->invoice->try_on_date = Carbon::tomorrow();
         $this->invoice->increment('num_tries');
         $this->invoice->save();
+
+        event(new InvoiceWasNotPaid($this->invoice));
     }
 }

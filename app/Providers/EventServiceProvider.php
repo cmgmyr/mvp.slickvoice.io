@@ -17,6 +17,10 @@ class EventServiceProvider extends ServiceProvider
             'Sv\Listeners\SendClientPaidInvoice',
             'Sv\Listeners\SendAdminsPaidInvoice',
         ],
+        'Sv\Events\InvoiceWasNotPaid' => [
+            'Sv\Listeners\SendClientNotPaidInvoice',
+            'Sv\Listeners\SendAdminsNotPaidInvoice',
+        ],
     ];
 
     /**
