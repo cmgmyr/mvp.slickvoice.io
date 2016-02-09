@@ -79,11 +79,13 @@ class InvoicesController extends Controller
                     }
                 }
 
+                $due_date = Carbon::createFromFormat('Y-m-d H', $request->due_date . ' 00', env('TIMEZONE'))->timezone('UTC');
+
                 $invoice = Invoice::create([
                     'client_id' => $request->client_id,
                     'public_id' => Invoice::getNextPublicId(),
-                    'due_date' => Carbon::createFromFormat('Y-m-d', $request->due_date),
-                    'try_on_date' => Carbon::createFromFormat('Y-m-d', $request->due_date),
+                    'due_date' => $due_date,
+                    'try_on_date' => $due_date,
                     'num_tries' => 0,
                     'status' => 'pending',
                     'repeat' => $request->repeat,
@@ -173,9 +175,11 @@ class InvoicesController extends Controller
                     }
                 }
 
+                $due_date = Carbon::createFromFormat('Y-m-d H', $request->due_date . ' 00', env('TIMEZONE'))->timezone('UTC');
+
                 $invoice->client_id = $request->client_id;
                 $invoice->repeat = $request->repeat;
-                $invoice->due_date = Carbon::createFromFormat('Y-m-d', $request->due_date);
+                $invoice->due_date = $due_date;
                 if ($invoice->try_on_date->gt($invoice->due_date)) {
                     $invoice->try_on_date = $invoice->due_date;
                 }
@@ -205,7 +209,7 @@ class InvoicesController extends Controller
         }
 
         $invoice->num_tries = 0;
-        $invoice->try_on_date = Carbon::today();
+        $invoice->try_on_date = Carbon::today(env('TIMEZONE'))->timezone('UTC');
         $invoice->status = 'overdue';
         $invoice->save();
 

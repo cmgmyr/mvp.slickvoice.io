@@ -41,7 +41,7 @@
             <!-- Due Date Form Input -->
             <div class="form-group">
                 {{ Form::label('due_date', 'Due Date', ['class' => 'control-label']) }}
-                <p class="form-control-static">{{ $invoice->due_date->format('m/d/Y') }}</p>
+                <p class="form-control-static">{{ $invoice->due_date->tz(env('TIMEZONE'))->format('m/d/Y') }}</p>
             </div>
         </div>
 

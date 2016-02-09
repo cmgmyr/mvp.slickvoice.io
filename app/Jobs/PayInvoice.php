@@ -83,7 +83,7 @@ class PayInvoice extends Job implements ShouldQueue
             $this->invoice->status = 'error';
         }
 
-        $this->invoice->try_on_date = Carbon::tomorrow();
+        $this->invoice->try_on_date = Carbon::tomorrow(env('TIMEZONE'))->timezone('UTC');
         $this->invoice->increment('num_tries');
         $this->invoice->save();
 

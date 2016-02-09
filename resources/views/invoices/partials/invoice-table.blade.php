@@ -26,7 +26,7 @@
         </td>
         <td>{{ $invoice->public_id }}</td>
         <td>{{ $invoice->client->name }}</td>
-        <td>{{ $invoice->due_date->format('m/d/Y') }}</td>
+        <td>{{ $invoice->due_date->tz(env('TIMEZONE'))->format('m/d/Y') }}</td>
         <td>${{ number_format($invoice->items->sum('price'), 2) }}</td>
         <td>{{ $invoice->repeat == 'no' ? '' : 'per ' . $invoice->repeat }}</td>
         <td>

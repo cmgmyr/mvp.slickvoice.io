@@ -17,8 +17,8 @@ class CreateInvoicesTable extends Migration
             $table->uuid('uuid');
             $table->integer('public_id')->unsigned();
             $table->integer('client_id')->unsigned();
-            $table->date('due_date');
-            $table->date('try_on_date');
+            $table->datetime('due_date');
+            $table->datetime('try_on_date');
             $table->tinyInteger('num_tries')->default(0);
             $table->enum('status', ['pending', 'paid', 'overdue', 'error'])->default('pending');
             $table->enum('repeat', ['no', 'month', 'year'])->default('no');
