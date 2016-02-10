@@ -63,7 +63,7 @@ class Invoice extends Model
      */
     public function logs()
     {
-        return $this->morphMany('Sv\Log', 'logable');
+        return $this->morphMany('Sv\Log', 'logable')->latest();
     }
 
     /**
@@ -73,7 +73,7 @@ class Invoice extends Model
      */
     public function latestLog()
     {
-        return $this->logs()->latest()->first()->render();
+        return $this->logs()->first()->render();
     }
 
     /**

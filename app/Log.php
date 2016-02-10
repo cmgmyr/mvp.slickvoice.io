@@ -20,7 +20,7 @@ class Log extends Model
      * @var array
      */
     protected $fillable = [
-        'code', 'message',
+        'level', 'body',
     ];
 
     /**
@@ -43,8 +43,28 @@ class Log extends Model
     public static function createFromException(Exception $e, Model $model)
     {
         $log = self::create([
-            'code' => $e->getCode(),
-            'message' => $e->getMessage(),
+            'level' => 'error',
+            'body' => '(' . $e->getCode() . ') ' . $e->getMessage(),
+        ]);
+
+        $model->logs()->save($log);
+
+        return $log;
+    }
+
+    /**
+     * Creates a new log for the specified model from a string.
+     *
+     * @param $message
+     * @param Model $model
+     * @param string $level
+     * @return Log
+     */
+    public static function createFromMessage($message, Model $model, $level = 'info')
+    {
+        $log = self::create([
+            'level' => $level,
+            'body' => $message,
         ]);
 
         $model->logs()->save($log);
@@ -59,6 +79,6 @@ class Log extends Model
      */
     public function render()
     {
-        return $this->created_at->tz(env('TIMEZONE'))->format('m/d/Y @ g:i:s a T') . ': (' . $this->code . ') ' . $this->message;
+        return '[' . $this->created_at->tz(env('TIMEZONE'))->format('m/d/Y @ g:i:s a T') . '] ' . $this->level . ': ' . $this->body;
     }
 }

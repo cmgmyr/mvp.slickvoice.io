@@ -16,8 +16,8 @@ class CreateLogsTable extends Migration
             $table->increments('id')->unsigned();
             $table->integer('logable_id');
             $table->string('logable_type');
-            $table->integer('code');
-            $table->string('message');
+            $table->enum('level', ['info', 'error'])->default('info');
+            $table->text('body');
             $table->timestamps();
         });
     }
