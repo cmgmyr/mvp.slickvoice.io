@@ -53,7 +53,7 @@ class PayInvoice extends Job implements ShouldQueue
 
             $this->invoice->status = 'paid';
             $this->invoice->charge_id = $charge->id;
-            $this->invoice->charge_date = Carbon::today();
+            $this->invoice->charge_date = Carbon::now();
             $this->invoice->save();
 
             $this->dispatch(new AddInvoiceFee($this->invoice, $charge->balance_transaction));

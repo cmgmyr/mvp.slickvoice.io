@@ -23,7 +23,7 @@ class CreateInvoicesTable extends Migration
             $table->enum('status', ['pending', 'paid', 'overdue', 'error'])->default('pending');
             $table->enum('repeat', ['no', 'month', 'year'])->default('no');
             $table->string('charge_id')->nullable();
-            $table->date('charge_date')->nullable();
+            $table->datetime('charge_date')->nullable();
             $table->float('charge_fee')->default(0);
             $table->timestamps();
             $table->softDeletes();
