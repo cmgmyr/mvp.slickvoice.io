@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Stripe\Customer as StripeCustomer;
+use Stripe\Error\Card as StripeDeclined;
 use Sv\Client;
 
 class ClientsController extends Controller
@@ -67,30 +68,36 @@ class ClientsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:clients|max:255',
-            'card_number' => 'required',
-            'csv' => 'required',
-            'exp_month' => 'required',
-            'exp_year' => 'required',
-        ]);
+        try {
+            $this->validate($request, [
+                'name' => 'required',
+                'email' => 'required|email|unique:clients|max:255',
+                'card_number' => 'required',
+                'csv' => 'required',
+                'exp_month' => 'required',
+                'exp_year' => 'required',
+            ]);
 
-        $customer = StripeCustomer::create([
-            'source' => $request->stripeToken,
-            'description' => $request->name,
-            'email' => $request->email,
-        ]);
+            $customer = StripeCustomer::create([
+                'source' => $request->stripeToken,
+                'description' => $request->name,
+                'email' => $request->email,
+            ]);
 
-        Client::create(array_merge($request->all(), [
-            'stripe_id' => $customer->id,
-            'card_last_four' => $customer->sources->data[0]->last4,
-            'card_exp_month' => $customer->sources->data[0]->exp_month,
-            'card_exp_year' => $customer->sources->data[0]->exp_year,
-            'card_brand' => $customer->sources->data[0]->brand,
-        ]));
+            Client::create(array_merge($request->all(), [
+                'stripe_id' => $customer->id,
+                'card_last_four' => $customer->sources->data[0]->last4,
+                'card_exp_month' => $customer->sources->data[0]->exp_month,
+                'card_exp_year' => $customer->sources->data[0]->exp_year,
+                'card_brand' => $customer->sources->data[0]->brand,
+            ]));
 
-        return $this->redirectRouteWithSuccess('clients.index', 'The client has been created.');
+            return $this->redirectRouteWithSuccess('clients.index', 'The client has been created.');
+        } catch (StripeDeclined $e) {
+            return $this->redirectBackWithError('The card has been declined, please try again.');
+        } catch (Exception $e) {
+            return $this->redirectBackWithError('Something unknown went wrong, please try again.');
+        }
     }
 
     /**
@@ -205,28 +212,32 @@ class ClientsController extends Controller
     {
         try {
             $client = Client::findOrFail($id);
+
+            $this->validate($request, [
+                'card_number' => 'required',
+                'csv' => 'required',
+                'exp_month' => 'required',
+                'exp_year' => 'required',
+            ]);
+
+            $customer = StripeCustomer::retrieve($client->stripe_id);
+            $customer->source = $request->stripeToken;
+            $customer->save();
+
+            $client->card_last_four = $customer->sources->data[0]->last4;
+            $client->card_exp_month = $customer->sources->data[0]->exp_month;
+            $client->card_exp_year = $customer->sources->data[0]->exp_year;
+            $client->card_brand = $customer->sources->data[0]->brand;
+
+            $client->save();
+
+            return $this->redirectRouteWithSuccess('clients.index', 'The client\'s card has been swapped.');
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The client was not found, please try again.');
+            return $this->redirectBackWithError('The client was not found, please try again.');
+        } catch (StripeDeclined $e) {
+            return $this->redirectBackWithError('The card has been declined, please try again.');
+        } catch (Exception $e) {
+            return $this->redirectBackWithError('Something unknown went wrong, please try again.');
         }
-
-        $this->validate($request, [
-            'card_number' => 'required',
-            'csv' => 'required',
-            'exp_month' => 'required',
-            'exp_year' => 'required',
-        ]);
-
-        $customer = StripeCustomer::retrieve($client->stripe_id);
-        $customer->source = $request->stripeToken;
-        $customer->save();
-
-        $client->card_last_four = $customer->sources->data[0]->last4;
-        $client->card_exp_month = $customer->sources->data[0]->exp_month;
-        $client->card_exp_year = $customer->sources->data[0]->exp_year;
-        $client->card_brand = $customer->sources->data[0]->brand;
-
-        $client->save();
-
-        return $this->redirectRouteWithSuccess('clients.index', 'The client\'s card has been swapped.');
     }
 }
