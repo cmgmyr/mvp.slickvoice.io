@@ -111,7 +111,7 @@ class ClientsController extends Controller
         try {
             $client = Client::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The client was not found, please try again.');
+            return $this->redirectBackWithError('The client was not found, please try again.');
         }
 
         return view('clients.edit', compact('client'));
@@ -129,7 +129,7 @@ class ClientsController extends Controller
         try {
             $client = Client::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The client was not found, please try again.');
+            return $this->redirectBackWithError('The client was not found, please try again.');
         }
 
         $this->validate($request, [
@@ -174,11 +174,12 @@ class ClientsController extends Controller
             $customer = StripeCustomer::retrieve($client->stripe_id);
             $customer->delete();
 
+            $client->invoices()->delete();
             $client->delete();
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The client was not found, please try again.');
+            return $this->redirectBackWithError('The client was not found, please try again.');
         } catch (Exception $e) {
-            $this->redirectBackWithError('Something unknown went wrong, please try again.');
+            return $this->redirectBackWithError('Something unknown went wrong, please try again.');
         }
 
         return $this->redirectRouteWithSuccess('clients.index', 'The client has been deleted.');
@@ -195,7 +196,7 @@ class ClientsController extends Controller
         try {
             $client = Client::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The client was not found, please try again.');
+            return $this->redirectBackWithError('The client was not found, please try again.');
         }
 
         return view('clients.card', compact('client'));

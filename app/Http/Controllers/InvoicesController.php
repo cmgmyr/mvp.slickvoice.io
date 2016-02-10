@@ -111,7 +111,7 @@ class InvoicesController extends Controller
         try {
             $invoice = Invoice::whereUuid($uuid)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The invoice was not found, please try again.');
+            return $this->redirectBackWithError('The invoice was not found, please try again.');
         }
 
         return view('invoices.show', compact('invoice'));
@@ -128,7 +128,7 @@ class InvoicesController extends Controller
         try {
             $invoice = Invoice::whereUuid($uuid)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The invoice was not found, please try again.');
+            return $this->redirectBackWithError('The invoice was not found, please try again.');
         }
 
         $clients = Client::orderBy('name', 'ASC')->lists('name', 'id');
@@ -149,7 +149,7 @@ class InvoicesController extends Controller
         try {
             $invoice = Invoice::whereUuid($uuid)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The invoice was not found, please try again.');
+            return $this->redirectBackWithError('The invoice was not found, please try again.');
         }
 
         $this->validate($request, [
@@ -205,7 +205,7 @@ class InvoicesController extends Controller
         try {
             $invoice = Invoice::whereUuid($uuid)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The invoice was not found, please try again.');
+            return $this->redirectBackWithError('The invoice was not found, please try again.');
         }
 
         $invoice->num_tries = 0;
@@ -229,7 +229,7 @@ class InvoicesController extends Controller
             $invoice->items()->delete();
             $invoice->delete();
         } catch (ModelNotFoundException $e) {
-            $this->redirectBackWithError('The invoice was not found, please try again.');
+            return $this->redirectBackWithError('The invoice was not found, please try again.');
         }
 
         return $this->redirectRouteWithSuccess('invoices.index', 'The invoice has been deleted.');
