@@ -188,7 +188,7 @@ class InvoicesController extends Controller
                 $invoice->items()->saveMany($items);
             });
         } catch (Exception $e) {
-            return $this->redirectBackWithError('Sorry, the invoice did not save. Please check your data and try again. -- ' . $e->getMessage());
+            return $this->redirectBackWithError('Sorry, the invoice did not save. Please check your data and try again.');
         }
 
         return $this->redirectRouteWithSuccess('invoices.index', 'The invoice has been updated.');
