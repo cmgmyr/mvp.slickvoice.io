@@ -180,7 +180,7 @@ class InvoicesController extends Controller
                 $invoice->client_id = $request->client_id;
                 $invoice->repeat = $request->repeat;
                 $invoice->due_date = $due_date;
-                if ($invoice->try_on_date->gt($invoice->due_date)) {
+                if ($invoice->try_on_date->lt($invoice->due_date)) {
                     $invoice->try_on_date = $invoice->due_date;
                 }
 
