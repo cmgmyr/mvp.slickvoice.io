@@ -64,4 +64,6 @@
             </div>
         </div>
     </div>
+
+    @include('invoices.partials.logs')
 @endsection
