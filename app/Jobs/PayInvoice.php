@@ -55,6 +55,7 @@ class PayInvoice extends Job implements ShouldQueue
             $this->invoice->charge_id = $charge->id;
             $this->invoice->charge_date = Carbon::now();
             $this->invoice->save();
+            SvLogger::createFromMessage('Successful payment has been made.', $this->invoice);
 
             $this->dispatch(new AddInvoiceFee($this->invoice, $charge->balance_transaction));
             event(new InvoiceWasPaid($this->invoice));
