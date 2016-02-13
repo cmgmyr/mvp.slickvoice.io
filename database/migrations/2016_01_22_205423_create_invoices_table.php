@@ -14,7 +14,7 @@ class CreateInvoicesTable extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->integer('public_id')->unsigned();
             $table->integer('client_id')->unsigned();
             $table->datetime('due_date');

@@ -14,7 +14,7 @@ class CreateInvoiceItemsTable extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->integer('invoice_id')->unsigned()->index();
             $table->text('description');
             $table->float('price');
