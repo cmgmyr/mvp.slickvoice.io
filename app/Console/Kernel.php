@@ -25,6 +25,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('sv:process-invoices')->hourly();
+        $schedule->command('sv:process-invoices')
+            ->everyFiveMinutes()
+            ->thenPing('http://beats.envoyer.io/heartbeat/7cEjiP1Joek46Fl');
     }
 }
