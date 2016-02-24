@@ -25,7 +25,7 @@
             <tr>
                 <td>{{ $client->stripe_id }}</td>
                 <td>{{ $client->name }}</td>
-                <td><a href="mailto: {{ $client->email }}">{{ $client->email }}</a></td>
+                <td><a href="mailto:{{ $client->email }}">{{ $client->email }}</a></td>
                 <td>{{ $client->phone }}</td>
                 <td>
                     <span class="fa fa-{{ $client->card_brand_class }}"></span>
