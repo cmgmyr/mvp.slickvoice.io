@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-1">
             <!-- Due Date Form Input -->
             <div class="form-group">
                 {{ Form::label('due_date', 'Due Date', ['class' => 'control-label']) }}
@@ -45,10 +45,14 @@
             </div>
         </div>
 
-        <div class="col-md-1">
+        <div class="col-md-2">
             <div class="form-group text-right">
                 <label for="total" class="control-label">Total</label>
-                <p class="form-control-static">${{ number_format($invoice->items->sum('price'), 2) }}</p>
+                <p class="form-control-static">
+                    Gross: ${{ $total = number_format($invoice->items->sum('price'), 2) }}<br>
+                    Fee: (${{ $fee = number_format($invoice->charge_fee, 2) }})<br>
+                    Net: ${{ number_format($total - $fee, 2) }}
+                </p>
             </div>
         </div>
     </div>
